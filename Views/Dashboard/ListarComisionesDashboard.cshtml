@@ -1,0 +1,83 @@
+﻿@model LoyalIGWEB.Models.ListarComisionesDashboard
+@{
+    ViewBag.Title = "Listar Comisiones";
+    ViewBag.pTitle = "Listar Comisiones";
+    ViewBag.pageTitle = "Comisiones";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Listado de Comisiones</h4>
+
+                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <td>Poliza</td>
+                            <td>Titular</td>
+                            <td>Tipo Venta</td>
+                            <td>Prima</td>
+                            <td>% Comisión</td>
+                            <td>Comisión</td>
+                            <td>Agente</td>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{int nCodigoCiclo = 0; }
+                        @foreach (var oListaComisiones in Model.ListaComisiones)
+                        {
+                            if (nCodigoCiclo != oListaComisiones.CodigoCicloComisiones)
+                            {
+                                nCodigoCiclo = oListaComisiones.CodigoCicloComisiones;
+                                <tr class="table-light">
+                                    <th><a href='@Url.Action("Download", "Home",new { nCodigoDocumento = 3107})'>Ver EECC</a></th>
+                                    <th colspan="10"> Periodo de Comisiones : @oListaComisiones.FechaInicio.ToString("MM/dd/yyyy") - @oListaComisiones.FechaFin.ToString("MM/dd/yyyy")</th>
+                              </tr>}
+                        <tr>
+                            <td>@oListaComisiones.NumeroPoliza.ToString()</td>
+                            <td>@oListaComisiones.NombreCompleto.ToString()</td>
+                            <td>@oListaComisiones.DescripcionTipoVenta.ToString()</td>
+                            <td>@oListaComisiones.PrimaComisionable.ToString("$###,###,###")</td >
+                            <td>@oListaComisiones.PorcentajeComision.ToString("##%")</td>
+                            <td>@oListaComisiones.ValorComision.ToString("$###,###,###")</td>
+                            <td>Agente @oListaComisiones.CodigoAgenteGenera.ToString() (@oListaComisiones.CodigoAgenteGenera.ToString())</td>
+                        </tr>
+                                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+@section scripts{
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

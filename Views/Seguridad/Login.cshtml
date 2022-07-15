@@ -1,0 +1,80 @@
+﻿@model LoyalIGWEB.Models.Login
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
+}
+
+<div class="account-pages my-5 pt-sm-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card col-lg-12">
+                <div>
+                    <div class="row">
+                        <div class="col-lg-4 card-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <img src="~/assets/images/Loyal/Logo_Loyal_small.png"  />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p><h3 class="text-primary-dark text-center">Bienvenido</h3></p>
+                                    <p><h6 class="text-center">Autentiquese para continuar...</h6></p>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <form class="form-horizontal" action=@Url.Action("login", "Seguridad") method="post">
+
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="User" id="User" placeholder="Ingrese su usuario" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="input-group auth-pass-inputgroup">
+                                            <input type="password" class="form-control" placeholder="Ingrese su contraseña" aria-label="Password" aria-describedby="password-addon" name="password" id="password" required>
+                                            <button class="btn btn-light " type="button" id="eyeBtn"><i class="mdi mdi-eye-outline"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="form-check col-lg-5">
+                                            <input class="form-check-input" type="checkbox" id="remember-check">
+                                            <label class="form-check-label" for="remember-check">
+                                                Recuerdame
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-7 text-right">
+                                            <a href=@Url.Action("Recoverpw", "Auth") class="text-muted"><i class="mdi mdi-lock me-1"></i> Olvido su contraseña?</a>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mt-3 d-grid">
+                                        <button class="btn btn-primary waves-effect waves-light" type="submit">Log In</button>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <img src="~/assets/images/Loyal/ImagenFamiliaLogin.png" height="450px" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- end account-pages -->
+@section scripts{
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+}

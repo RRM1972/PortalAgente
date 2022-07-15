@@ -1,0 +1,102 @@
+﻿@model LoyalIGWEB.Models.SubirArchivosCertificado
+@{
+    ViewBag.Title = "Documentos de Certificado";
+    ViewBag.pTitle = "Documentos de Certificado";
+    ViewBag.pageTitle = "Documentos de Certificado";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/libs/spectrum-colorpicker2/spectrum.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.css">
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="text-center card-title rounded" style="background-color:@Model.ColorPrincipal">
+                <p><h4 class="text-white">@Model.Titular @Model.NumeroPoliza @Model.DescripcionPoliza (@Model.DescripcionEstadoCertificado)</h4></p>
+            </div>
+        </div>
+    </div>
+</div>
+<form action="/Certificados/SubirArchivosCertificado" method="post">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 mb-3">
+                        <label for="CodigoTipoDocumento" class="form-label">Tipo de Documento</label>
+                        <select class="form-control select2-search-disable" name="CodigoTipoDocumento" id="CodigoTipoDocumento" required>
+                            @foreach (var oListaTipoDocumentoCliente in Model.ListaTipoDocumentoCliente)
+                            {
+                                if (oListaTipoDocumentoCliente.CodigoTipoDocumento == Model.CodigoTipoDocumento)
+                                {
+                                    <option value=@oListaTipoDocumentoCliente.CodigoTipoDocumento selected>@oListaTipoDocumentoCliente.DescripcionTipoDocumento</option>
+                                }
+                                else
+                                {
+                                    <option value=@oListaTipoDocumentoCliente.CodigoTipoDocumento>@oListaTipoDocumentoCliente.DescripcionTipoDocumento</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="Documento" name="Documento" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required>
+                        <button class="btn btn-primary" type="button" id="inputGroupFileAddon04">Subir Archivo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        @{ string sTipoDocimento = "";}
+                        @foreach (var oDocumento in Model.ListaDocumentos)
+                        {
+                            if (sTipoDocimento != oDocumento.DescripcionClasificacionTipoDocumento)
+                            {
+                                sTipoDocimento = oDocumento.DescripcionClasificacionTipoDocumento;
+                                <tr>
+                                    <td class="bg-dark text-white">@oDocumento.DescripcionClasificacionTipoDocumento</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td><a href='@Url.Action("Download", "Home",new { nCodigoDocumento = oDocumento.CodigoDocumento})'>@oDocumento.NombreDocumento</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

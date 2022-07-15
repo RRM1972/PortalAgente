@@ -1,0 +1,111 @@
+﻿@model LoyalIGWEB.Models.PantallaListadoCotizaciones
+@{
+    ViewBag.Title = "Listado Cotizaciones";
+    ViewBag.pTitle = "Listado Cotizaciones";
+    ViewBag.pageTitle = "Cotizaciones";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Listado de Cotizaciones</h4>
+
+                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("SolicitarCotizacion", "Cotizacion",new { nCodigoCotizacion = 0 })'">
+                    <i class="bx bxs-purchase-tag font-size-16 align-middle me-2"></i> Generar Cotización
+                </button>
+
+                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                    <thead class="table-primary">
+                        <tr>
+                            <th> </th>
+                            <th>#</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Solicitante</th>
+                            <th>Datos</th>
+                            <th>País</th>
+                            <th> </th>
+                            <th>Conyuge</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var oRegistroCotizaciones in Model.lstListadoCotizaciones)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm edit" title="Consultar Cotización" onclick="location.href='@Url.Action("ConsultaCotizacion", "Cotizacion",new { nCodigoCotizacion = oRegistroCotizaciones.CodigoCotizacion })'">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    @if (oRegistroCotizaciones.CodigoEstadoCotizacion == "01")
+                                    {
+                                        <a class="btn btn-outline-secondary btn-sm edit" title="Recotizar" onclick="location.href='@Url.Action("SolicitarCotizacion", "Cotizacion",new { nCodigoCotizacion = oRegistroCotizaciones.CodigoCotizacion })'">
+                                            <i class="fas fa-reply"></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td>@oRegistroCotizaciones.CodigoCotizacion.ToString()</td>
+                                <td>@oRegistroCotizaciones.FechaCotizacion.ToString("MM/dd/yyyy")</td>
+                                <td>@oRegistroCotizaciones.DescripcionEstadoCotizacion.ToString()</td>
+                                <td>@oRegistroCotizaciones.NombreCompleto.ToString()</td>
+                                <td>
+                                    @oRegistroCotizaciones.FechaNacimientoTitular.ToString("MM/dd/yyyy")
+                                @oRegistroCotizaciones.EdadTitular.ToString() Años
+                                @oRegistroCotizaciones.SexoTitular.ToString()
+                            </td>
+                            <td>@oRegistroCotizaciones.DescripcionPais.ToString()</td>
+                            <td>
+                                @oRegistroCotizaciones.Dependientes.ToString() Dependientes
+                                @if (@oRegistroCotizaciones.Maternidad.ToString() == "1")
+                                {<p>Complicaciones de Maternidad</p>}
+                                @if (@oRegistroCotizaciones.Trasplante.ToString() == "1")
+                                {<p>Trasplante de Organos</p>}
+                            </td>
+
+                            <td>
+                                @oRegistroCotizaciones.FechaNacimientoConyuge.ToString()
+                                @oRegistroCotizaciones.EdadConyuge.ToString()
+                                @oRegistroCotizaciones.SexoConyuge.ToString()
+                            </td>
+
+
+                        </tr>
+                    }
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+@section scripts{
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

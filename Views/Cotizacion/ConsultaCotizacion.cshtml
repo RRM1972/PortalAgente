@@ -1,0 +1,1307 @@
+﻿@model LoyalIGWEB.Models.ConsultaCotizacion
+@{
+    ViewBag.Title = "Consulta Cotización";
+    ViewBag.pTitle = "Consulta Cotización";
+    ViewBag.pageTitle = "Consulta Cotización";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Consulta Cotización</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center card-title bg-primary text-white rounded">
+                        <h4 class="text-white">Cotizacion Nro. @Model.CodigoCotizacion</h4>
+                    </div>
+                    <div class="card-title rounded">
+                        Datos Solicitante
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="row">
+                        <div><h5>@Model.NombreSolicitante</h5></div>
+                    </div>
+                    <div class="row">
+                        @if (Model.SexoSolicitante == "M")
+                        {<div><h5>Masculino</h5></div>}
+                        else
+                        { <div><h5>Femenino</h5></div>}
+
+                    </div>
+                    <div class="row">
+                        <div><h5>@Model.FechaNacimnientoSolicitante.ToString()</h5></div>
+                    </div>
+                    <div class="row">
+                        <div><h5>@Model.EdadSolicitante.ToString() Años</h5></div>
+                    </div>
+                    <div class="row">
+                        <div><h5>@Model.Correo.ToString()</h5></div>
+                    </div>
+                </div>
+
+            </div>
+            @if (Model.FechaNacimnientoConyuge != "")
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title rounded">
+                            Datos Conyuge
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="row">
+                            @if (Model.SexoConyuge == "M")
+                            {<div><h5>Masculino</h5></div>}
+                            else
+                            { <div><h5>Femenino</h5></div>}
+
+                        </div>
+                        <div class="row">
+                            <div><h5>@Model.FechaNacimnientoConyuge.ToString()</h5></div>
+                        </div>
+                        <div class="row">
+                            <div><h5>@Model.EdadConyuge.ToString() Años</h5></div>
+                        </div>
+                    </div>
+
+                </div>}
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title rounded">
+                        Información Cotización
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="row">
+                        <div><h5>@Model.DescripcionPais</h5></div>
+                    </div>
+                    <div class="row">
+                        <div><h5>@Model.NumeroDependientes.ToString() Dependientes</h5></div>
+                    </div>
+                    <div class="row">
+                        @if (Model.ComplicacionesMaternidad == "1")
+                        {<div><h5>Complicaciones de Maternidad : SI</h5></div>}
+                        else
+                        {<div><h5>Complicaciones de Maternidad : NO</h5></div>}
+                    </div>
+                    <div class="row">
+                        @if (Model.TrasplanteOrganos == "1")
+                        {<div><h5>Trasplante de Organos : SI</h5></div>}
+                        else
+                        {<div><h5>Trasplante de Organos  : NO</h5></div>}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="col-lg-12">
+                <div class="row mb-3">
+                    <div class="col-lg-1">&nbsp;</div>
+                    @if (Model.CodigoEstadoCotizacion == "01")
+                    {
+                        <button type="button" class="col-lg-3 btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("SolicitarCotizacion", "Cotizacion",new { nCodigoCotizacion = Model.CodigoCotizacion })'">
+                            Modificar Cotización
+                        </button>
+                        <div class="col-lg-1">&nbsp;</div>
+                    }
+                    <button type="button" class="col-lg-3 btn btn-primary waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCorreo" aria-controls="offcanvasCorreo">Enviar Cotización</button>
+                    <div class="col-lg-1">&nbsp;</div>
+                    <button type="button" class="col-lg-3 btn btn-primary waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAprobar" aria-controls="offcanvasAprobar">Aprobar Cotización</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#beyond" role="tab">
+                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                <span class="d-none d-sm-block">Beyond</span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-bs-toggle="tab" href="#privilege" role="tab">
+                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                <span class="d-none d-sm-block">Privilege</span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-bs-toggle="tab" href="#liberty" role="tab">
+                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                <span class="d-none d-sm-block">Liberty</span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-bs-toggle="tab" href="#legacy" role="tab">
+                                <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                <span class="d-none d-sm-block">Legacy</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3 text-muted">
+                        <div class="tab-pane active" id="beyond" role="tabpanel">
+                            <div class="row">
+                                <a href='@Url.Action("DownloadCotizacion", "Home",new { nCodigoCotizacion = Model.CodigoCotizacion,nCodigoProducto = 1,nCodigoUsuario = 1,sIdioma = "es" })'>Descargar PDF BEYOND Cotizacion @Model.CodigoCotizacion</a>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr class="text-white text-center rounded" style="background-color:#326295;">
+                                                    <th colspan="7">Comparativa de planes Anuales </th>
+                                                </tr>
+                                                <tr class="bg-secondary text-white text-center">
+                                                    <th>Deducibles</th>
+                                                    <th>Opcion I</th>
+                                                    <th>Opcion II</th>
+                                                    <th>Opcion III</th>
+                                                    <th>Opcion IV</th>
+                                                    <th>Opcion V</th>
+                                                    <th>Opcion VI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Fuera de Usa</td>
+                                                    <td class="text-center">$500</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dentro de Usa</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$3,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr class="text-white text-center" style="background-color:#326295;">
+                                                    <th colspan="7">Anual</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasAnualBeyond)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row"><h5>Conyuge</h5></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#326295;">
+                                                    <th colspan="7">Semestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasSemiAnualBeyond)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#326295;">
+                                                    <th colspan="7">Trimestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasTrimestralBeyond)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do, 3er, 4to Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="privilege" role="tabpanel">
+                            <div class="row">
+                                <a href='@Url.Action("DownloadCotizacion", "Home",new { nCodigoCotizacion = Model.CodigoCotizacion,nCodigoProducto = 2,nCodigoUsuario = 1,sIdioma = "es" })'>Descargar PDF PRIVILEGE Cotizacion @Model.CodigoCotizacion</a>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr class="text-white text-center rounded" style="background-color:#8dc341;">
+                                                    <th colspan="7">Comparativa de planes Anuales</th>
+                                                </tr>
+                                                <tr class="bg-secondary text-white text-center">
+                                                    <th>Deducibles</th>
+                                                    <th>Opcion I</th>
+                                                    <th>Opcion II</th>
+                                                    <th>Opcion III</th>
+                                                    <th>Opcion IV</th>
+                                                    <th>Opcion V</th>
+                                                    <th>Opcion VI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Fuera de Usa</td>
+                                                    <td class="text-center">$500</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dentro de Usa</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$3,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr class="text-white text-center" style="background-color:#8dc341;">
+                                                    <th colspan="7">Anual</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasAnualPrivilege)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row"><h5>Conyuge</h5></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#8dc341;">
+                                                    <th colspan="7">Semestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasSemiAnualPrivilege)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#8dc341;">
+                                                    <th colspan="7">Trimestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasTrimestralPrivilege)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do, 3er, 4to Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="liberty" role="tabpanel">
+                            <div class="row">
+                                <a href='@Url.Action("DownloadCotizacion", "Home",new { nCodigoCotizacion = Model.CodigoCotizacion,nCodigoProducto = 3,nCodigoUsuario = 1,sIdioma = "es" })'>Descargar PDF LIBERTY Cotizacion @Model.CodigoCotizacion</a>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr class="text-white text-center rounded" style="background-color:#30b6b5;">
+                                                    <th colspan="7">Comparativa de planes Anuales</th>
+                                                </tr>
+                                                <tr class="bg-secondary text-white text-center">
+                                                    <th>Deducibles</th>
+                                                    <th>Opcion I</th>
+                                                    <th>Opcion II</th>
+                                                    <th>Opcion III</th>
+                                                    <th>Opcion IV</th>
+                                                    <th>Opcion V</th>
+                                                    <th>Opcion VI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Fuera de Usa</td>
+                                                    <td class="text-center">$500</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dentro de Usa</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$3,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr class="text-white text-center" style="background-color:#30b6b5;">
+                                                    <th colspan="7">Anual</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasAnualLiberty)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row"><h5>Conyuge</h5></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#30b6b5;">
+                                                    <th colspan="7">Semestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasSemiAnualLiberty)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#30b6b5;">
+                                                    <th colspan="7">Trimestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasTrimestralLiberty)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do, 3er, 4to Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="legacy" role="tabpanel">
+                            <div class="row">
+                                <a href='@Url.Action("DownloadCotizacion", "Home",new { nCodigoCotizacion = Model.CodigoCotizacion,nCodigoProducto = 4,nCodigoUsuario = 1,sIdioma = "es" })'>Descargar PDF LEGACY Cotizacion @Model.CodigoCotizacion</a>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr class="text-white text-center rounded" style="background-color:#841a66;">
+                                                    <th colspan="7">Comparativa de planes Anuales</th>
+                                                </tr>
+                                                <tr class="bg-secondary text-white text-center">
+                                                    <th>Deducibles</th>
+                                                    <th>Opcion I</th>
+                                                    <th>Opcion II</th>
+                                                    <th>Opcion III</th>
+                                                    <th>Opcion IV</th>
+                                                    <th>Opcion V</th>
+                                                    <th>Opcion VI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Fuera de Usa</td>
+                                                    <td class="text-center">$500</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dentro de Usa</td>
+                                                    <td class="text-center">$1,000</td>
+                                                    <td class="text-center">$2,000</td>
+                                                    <td class="text-center">$3,000</td>
+                                                    <td class="text-center">$5,000</td>
+                                                    <td class="text-center">$10,000</td>
+                                                    <td class="text-center">$20,000</td>
+                                                </tr>
+                                                <tr class="text-white text-center" style="background-color:#841a66;">
+                                                    <th colspan="7">Anual</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasAnualLegacy)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row"><h5>Conyuge</h5></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#841a66;">
+                                                    <th colspan="7">Semestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasSemiAnualLegacy)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                                <tr class="text-white text-center" style="background-color:#841a66;">
+                                                    <th colspan="7">Trimestral</th>
+                                                </tr>
+                                                @foreach (var oPrimas in Model.ListaPrimasTrimestralLegacy)
+                                                {
+                                                    if (oPrimas.Cobertura != "2")
+                                                    {
+                                                        <tr>
+                                                            @{
+                                                                if (oPrimas.Cobertura == "1")
+                                                                {
+                                                                    if (oPrimas.TipoPersona == "01")
+                                                                    {
+                                                                        <th scope="row">Titular</th>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <th scope="row">Conyuge</th>
+                                                                    }
+
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "3")
+                                                                {
+                                                                    <th scope="row">Dependientes</th>
+                                                                }
+
+                                                                if (oPrimas.Cobertura == "4")
+                                                                {
+                                                                    <th scope="row">Complicaciones Maternidad</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "5")
+                                                                {
+                                                                    <th scope="row">Trasplantes Organos</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "CAD")
+                                                                {
+                                                                    <th scope="row">Costo Administrativo</th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "TOT")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 1er Pago</h6></th>
+                                                                }
+                                                                if (oPrimas.Cobertura == "STO")
+                                                                {
+                                                                    <th scope="row" class="bg-secondary bg-soft"><h6>Total 2do, 3er, 4to Pago</h6></th>
+                                                                }
+
+                                                            }
+                                                            @if (oPrimas.Cobertura == "TOT" || oPrimas.Cobertura == "STO")
+                                                            {
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion1.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion2.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion3.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion4.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion5.ToString()</h6></td>
+                                                                <td class="text-center bg-secondary bg-soft"><h6>@oPrimas.Opcion6.ToString()</h6></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-center">@oPrimas.Opcion1.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion2.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion3.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion4.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion5.ToString()</td>
+                                                                <td class="text-center">@oPrimas.Opcion6.ToString()</td>
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Envio de Correo-->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasCorreo" aria-labelledby="offcanvasCorreo">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Enviar Cotizacion</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Selecciona Producto</label>
+
+                        <select class="form-select" name="CodigoProducto" id="CodigoProducto">
+                            <option value=1>Beyond</option>
+                            <option value=2>Privilege</option>
+                            <option value=3>Liberty</option>
+                            <option value=4>Legacy</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Selecciona Correo</label>
+
+                        <select class="form-select" name="CodigoProducto" id="CodigoProducto">
+                            <option value=1 selected>Correo1@gmail.com</option>
+                            <option value=2>Correo2@gmail.com</option>
+                            <option value=3>Correo3@gmail.com</option>
+                            <option value=1>Otro Correo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="NombreSolicitante" class="form-label">Otro Correo</label>
+                        <input type="text" class="form-control" placeholder="Otro Correo..." name="OtroCorreo" id="OtroCorreo" maxlength="100" value="" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="button" class="btn btn-primary waves-effect waves-light">Enviar Correo</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasAprobar" aria-labelledby="offcanvasAprobar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Aprobar Cotizacion</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Selecciona Producto</label>
+
+                        <select class="form-select" name="CodigoProducto" id="CodigoProducto">
+                            <option value=1>Beyond</option>
+                            <option value=2>Privilege</option>
+                            <option value=3>Liberty</option>
+                            <option value=4>Legacy</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Selecciona Producto</label>
+
+                        <select class="form-select" name="CodigoProducto" id="CodigoProducto">
+                            <option value=1>Opción I $500 - $1,000</option>
+                            <option value=1>Opción II $1,000 - $2,000</option>
+                            <option value=1>Opción III $2,000 - $3,000</option>
+                            <option value=1>Opción IV $5,000</option>
+                            <option value=1>Opción V $10,000</option>
+                            <option value=1>Opción V $20,000</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Selecciona Forma de Pago</label>
+
+                        <select class="form-select" name="CodigoProducto" id="CodigoProducto">
+                            <option value=1 selected>Anual</option>
+                            <option value=2>Semestral</option>
+                            <option value=3>Trimestral</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("Consulta", "Certificados",new { nCodigoCertificado = 229 })'">Aprobar Cotización</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

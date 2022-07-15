@@ -1,0 +1,198 @@
+﻿@model LoyalIGWEB.Models.RegistroPersona
+@{
+    ViewBag.Title = "Asegurado";
+    ViewBag.pTitle = "Asegurado";
+    ViewBag.pageTitle = "Asegurado";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registrar Persona</title>
+</head>
+
+<body>
+
+    <div class="row">
+         <div class="card col-md-10">
+             <div class="card-body">
+                 <div class="col-md-12 mb-3">
+                     <label for="CodigoTipoRelacion" class="form-label">Relación</label>
+
+                     <select class="form-control select2" name="CodigoTipoRelacion" id="CodigoTipoRelacion">
+                         @foreach (var oListaTipoRelacion in Model.ListaTipoPersonaCertificado)
+                         {
+                             if (oListaTipoRelacion.CodigoTipoPersonaCotizacion == Model.CodigoTipoRelacion)
+                             {
+                                 <option value=@oListaTipoRelacion.CodigoTipoPersonaCotizacion selected>@oListaTipoRelacion.DescripcionTipoPersonaCotizacion</option>
+                             }
+                             else
+                             {
+                                 <option value=@oListaTipoRelacion.CodigoTipoPersonaCotizacion>@oListaTipoRelacion.DescripcionTipoPersonaCotizacion</option>
+                             }
+
+                         }
+                     </select>
+                 </div>
+                 <div class="col-md-12">
+                     <div class="row">
+                         <div class="col-md-4 mb-3">
+                             <label for="Nombre" class="form-label">Nombre</label>
+                             <input type="text" class="form-control" placeholder="Nombre..." name="Nombre" id="Nombre" maxlength="100" value="@Model.Nombre" required>
+                         </div>
+                         <div class="col-md-4 mb-3">
+                             <label for="ApellidoPaterno" class="form-label">Nombre</label>
+                             <input type="text" class="form-control" placeholder="ApellidoPaterno..." name="ApellidoPaterno" id="ApellidoPaterno" maxlength="100" value="@Model.ApellidoPaterno" required>
+                         </div>
+                         <div class="col-md-4 mb-3">
+                             <label for="ApellidoMaterno" class="form-label">Nombre</label>
+                             <input type="text" class="form-control" placeholder="ApellidoMaterno..." name="ApellidoMaterno" id="ApellidoMaterno" maxlength="100" value="@Model.ApellidoMaterno" required>
+                         </div>
+                     </div>
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="row">
+                         <div class="col-md-6 mb-3">
+                             <label for="FechaNacimiento" class="form-label">Fecha Nacimiento</label>
+                             <input class="form-control" type="date" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" id="FechaNacimiento" name="FechaNacimiento">
+                         </div>
+                         <div class="col-md-6 mb-3">
+                             <label class="form-label">Género</label>
+
+                             <select class="form-select" name="SexoSolicitante" id="SexoSolicitante">
+                                 @if (Model.Sexo == "M")
+                                 {
+                                     <option value="M" selected>Masculino</option>
+                                     <option value="F">Femenino</option>
+                                 }
+                                 else
+                                 {
+                                     <option value="M">Masculino</option>
+                                     <option value="F" selected>Femenino</option>
+                                 }
+                             </select>
+                         </div>
+                     </div>
+                 </div>
+
+
+                 <div class="col-md-12">
+                     <div class="row">
+                         <div class="col-md-8 mb-3">
+                             <label for="DireccionPrincipal" class="form-label">Dirección Principal</label>
+                             <textarea type="text" class="form-control" placeholder="Nombre..." name="DireccionPrincipal" id="DireccionPrincipal" maxlength="100" required>@Model.DireccionPrincipal</textarea>
+                         </div>
+                         <div class="col-md-4 mb-3">
+                             <label for="CodigoPais" class="form-label">Pais</label>
+
+                             <select class="form-control select2" name="CodigoPais" id="CodigoPais">
+                                 @foreach (var oListaPais in Model.ListaPaises)
+                                 {
+                                     if (oListaPais.CodigoPais == Model.CodigoPaisPrincipal)
+                                     {
+                                         <option value=@oListaPais.CodigoPais selected>@oListaPais.DescripcionPais</option>
+                                     }
+                                     else
+                                     {
+                                         <option value=@oListaPais.CodigoPais>@oListaPais.DescripcionPais</option>
+                                     }
+
+                                 }
+                             </select>
+                         </div>
+                     </div>
+
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="row">
+                         <div class="col-md-8 mb-3">
+                             <label for="DireccionPostal" class="form-label">Dirección Postal</label>
+                             <textarea type="text" class="form-control" placeholder="Dirección Postal ..." name="DireccionPostal" id="DireccionPostal" maxlength="100" required>@Model.DireccionPostal</textarea>
+                         </div>
+                         <div class="col-md-4 mb-3">
+                             <label for="CodigoPaisPostal" class="form-label">Pais</label>
+
+                             <select class="form-control select2" name="CodigoPaisPostal" id="CodigoPaisPostal">
+                                 @foreach (var oListaPais in Model.ListaPaises)
+                                 {
+                                     if (oListaPais.CodigoPais == Model.CodigoPaisPostal)
+                                     {
+                                         <option value=@oListaPais.CodigoPais selected>@oListaPais.DescripcionPais</option>
+                                     }
+                                     else
+                                     {
+                                         <option value=@oListaPais.CodigoPais>@oListaPais.DescripcionPais</option>
+                                     }
+
+                                 }
+                             </select>
+                         </div>
+                     </div>
+
+                 </div>
+
+                 <div class="col-md-12">
+                     <div class="row">
+                         <div class="col-md-8 mb-3">
+                             <label for="DireccionAlternativa" class="form-label">Dirección Alternativa</label>
+                             <textarea type="text" class="form-control" placeholder="Dirección Alternativa ....." name="DireccionAlternativa" id="DireccionAlternativa" maxlength="100" required>@Model.DireccionAlternativa</textarea>
+                         </div>
+                         <div class="col-md-4 mb-3">
+                             <label for="CodigoPaisAlternativa" class="form-label">Pais</label>
+
+                             <select class="form-control select2" name="CodigoPaisAlternativa" id="CodigoPaisAlternativa">
+                                 @foreach (var oListaPais in Model.ListaPaises)
+                                 {
+                                     if (oListaPais.CodigoPais == Model.CodigoPaisAlternativa)
+                                     {
+                                         <option value=@oListaPais.CodigoPais selected>@oListaPais.DescripcionPais</option>
+                                     }
+                                     else
+                                     {
+                                         <option value=@oListaPais.CodigoPais>@oListaPais.DescripcionPais</option>
+                                     }
+
+                                 }
+                             </select>
+                         </div>
+                     </div>
+
+                 </div>
+                 <div class="col-md-12">
+                     <div class="row">
+                             <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href=''">
+                                 <i class="bx bxs-purchase-tag font-size-16 align-middle me-2"></i> Actualizar Datos de Persona
+                             </button>
+                     </div>
+
+                 </div>
+             </div>
+         </div>
+    </div>
+
+</body>
+</html>
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

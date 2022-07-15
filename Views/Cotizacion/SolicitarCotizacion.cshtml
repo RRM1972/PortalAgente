@@ -1,0 +1,218 @@
+﻿@model LoyalIGWEB.Models.SolicitarCotizacion
+@{
+    ViewBag.Title = "Registro de Cotización";
+    ViewBag.pTitle = "Registro de Cotización";
+    ViewBag.pageTitle = "Registro de Cotización";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registro de Cotización</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-lg-2">&nbsp;</div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/Cotizacion/SolicitarCotizacion" method="post">
+                            <input type="hidden" name="CodigoCotizacion" id="CodigoCotizacion" value="@Model.CodigoCotizacion"/>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Agente</label>
+
+                                <select class="form-select" name="CodigoAgente" id="CodigoAgente">
+                                    @foreach (var oListaAgente in Model.ListarAgentes)
+                                    {
+                                        if (oListaAgente.CodigoAgente == Model.CodigoAgente)
+                                        {
+                                            <option value=@oListaAgente.CodigoAgente selected>Agente @oListaAgente.CodigoAgente</option>
+                                        }
+                                        else
+                                        {
+                                            <option value=@oListaAgente.CodigoAgente>Agente @oListaAgente.CodigoAgente</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="FechaInicioValidez" class="form-label">Fecha Inicio Validez</label>
+                                    <input class="form-control" type="date" value="@Model.FechaInicioValidez.ToString("yyyy-MM-dd")" id="FechaInicioValidez" name="FechaInicioValidez">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="CodigoPais" class="form-label">Pais</label>
+
+                                    <select class="form-control select2" name="CodigoPais" id="CodigoPais">
+                                        @foreach (var oListaPais in Model.ListarPaises)
+                                        {
+                                            if (oListaPais.CodigoPais == Model.CodigoPais)
+                                            {
+                                                <option value=@oListaPais.CodigoPais selected>@oListaPais.DescripcionPais</option>
+                                            }
+                                            else
+                                            {
+                                                <option value=@oListaPais.CodigoPais>@oListaPais.DescripcionPais</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label for="NombreSolicitante" class="form-label">Nombre Solicitante</label>
+                                <input type="text" class="form-control" placeholder="Nombre Solicitante..." name="NombreSolicitante" id="NombreSolicitante" maxlength="100" value="@Model.NombreSolicitante" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="FechaNacmimientoSolicitante" class="form-label">Fecha Nacimiento Solicitante</label>
+                                    <input class="form-control" type="date" value="@Model.FechaNacmimientoSolicitante.ToString("yyyy-MM-dd")" id="FechaNacmimientoSolicitante" name="FechaNacmimientoSolicitante">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Género Solicitante</label>
+
+                                    <select class="form-select" name="SexoSolicitante" id="SexoSolicitante">
+                                        @if (Model.SexoSolicitante == "M")
+                                        {
+                                            <option value="M" selected>Masculino</option>
+                                            <option value="F">Femenino</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="M">Masculino</option>
+                                            <option value="F" selected>Femenino</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Correo" class="form-label">Correo</label>
+                                <input type="text" class="form-control" placeholder="Correo..." name="Correo" id="Correo" maxlength="100" value="@Model.Correo" required>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-radio-primary mb-3">
+                                    <input class="form-check-input" type="checkbox" name="IndicadorConyuge" id="IndicadorConyuge" onchange="javascript:showContent()">
+                                    <label class="form-check-label" for="IndicadorConyuge">Conyuge</label>
+                                </div>
+                            </div>
+                            <div id="conyuge" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="FechaNacmimientoConyuge" class="form-label">Fecha Nacimiento Conyuge</label>
+                                        <input class="form-control" type="date" value="@Model.FechaNacmimientoConyuge.ToString("yyyy-MM-dd")" id="FechaNacmimientoConyuge" name="FechaNacmimientoConyuge">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Género Conyuge</label>
+                                        <select class="form-select" name="SexoConyuge" id="SexoConyuge">
+                                            @if (Model.SexoConyuge == "M")
+                                            {
+                                                <option value="M" selected>Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="M">Masculino</option>
+                                                <option value="F" selected>Femenino</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Dependientes</label>
+                                    <select class="form-select" name="NumeroDependientes" id="NumeroDependientes">
+                                        @foreach (var oListaDependientes in Model.ListarDependientes)
+                                        {
+                                            if (oListaDependientes.NumeroDependiente == Model.NumeroDependientes)
+                                            {
+                                                <option value=@oListaDependientes.NumeroDependiente selected>@oListaDependientes.DescripcionNumeroDependiente</option>
+                                            }
+                                            else
+                                            {
+                                                <option value=@oListaDependientes.NumeroDependiente>@oListaDependientes.DescripcionNumeroDependiente</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-radio-primary mb-3">
+                                        <input class="form-check-input" type="checkbox" name="TrasplanteOrganos" id="TrasplanteOrganos">
+                                        <label class="form-check-label" for="TrasplanteOrganos">Trasplante de Organos</label>
+                                    </div>
+                                    <div class="form-check form-radio-primary mb-3">
+                                        <input class="form-check-input" type="checkbox" name="ComplicacionesMaternidad" id="ComplicacionesMaternidad">
+                                        <label class="form-check-label" for="ComplicacionesMaternidad">Complicaciones de Maternidad</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="row">
+                                <div class="col-lg-1">&nbsp;</div>
+                                <div class="col-lg-4">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                        <i class="bx bxs-purchase-tag font-size-16 align-middle me-2"></i> Generar Cotización
+                                    </button>
+                                </div>
+                                <div class="col-lg-2">&nbsp;</div>
+                                <div class="col-lg-4">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("SolicitarCotizacion", "Cotizacion",new { nCodigoCotizacion = 0})'">
+                                        <i class="bx bxs-purchase-tag font-size-16 align-center me-2"></i> Limpiar Cotización
+                                    </button>
+                                </div>
+                                <div class="col-lg-1">&nbsp;</div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    function showContent() {
+        element = document.getElementById("conyuge");
+        check = document.getElementById("IndicadorConyuge");
+        if (check.checked) {
+            element.style.display = 'block';
+        }
+        else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

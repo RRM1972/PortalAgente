@@ -1,0 +1,94 @@
+﻿@model LoyalIGWEB.Models.DashBoardPrincipal
+@{
+    ViewBag.Title = "Dashboard Principal de Agentes";
+    ViewBag.pTitle = "Convención CANCUN 2023";
+    ViewBag.pageTitle = "dashboard";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-xl-10 offset-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="card-title">Agente Individual</div>
+                    <div class="progress progress-xl">                        
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 31%" aria-valuenow="121767" aria-valuemin="0" aria-valuemax="121767">Individual ($121,767)</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="card-title">Agencia</div>
+                    <div class="progress progress-xl">
+                        <div class="progress-bar bg-dark" role="progressbar" style="width: 29%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="121767"> ($180,456)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-10 offset-1">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive table-bordered">
+                    <table class="table mb-0" width="100%">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" colspan="3">
+                                    Agente Individual
+                                </th>
+                                <th class="text-center"  colspan="3">
+                                    Agencia
+                                </th>
+                            </tr>
+                        </thead>
+                        <tr class="text-center">
+                            <td>Individual</td>
+                            <td>$100,000</td>
+                            <td>27</td>
+                            <td>Individual</td>
+                            <td>$200,000</td>
+                            <td>24</td>
+                        </tr>
+                        <tr  class="text-center">
+                            <td>Doble</td>>
+                            <td>$220,000</td>
+                            <td>59</td>
+                            <td>Doble</td>
+                            <td>$440,000</td>
+                            <td>119</td>
+                        </tr>
+                        <tr  class="text-center">
+                            <td>VIP Summit</td>
+                            <td>$400,000</td>
+                            <td>108</td>
+                            <td>VIP Summit</td>
+                            <td>$600,000</td>
+                            <td>162</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center table-light" colspan="6">
+                                Polizas Emitidas y Cobradas
+                            </td>
+                        </tr>
+                    </table>
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="text-center mb-4">
+            <div class="row justify-content-center">
+                <div class="col-xl-12">
+                    <img src="~/assets/images/Loyal/PopupLoyal.png" height="525" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

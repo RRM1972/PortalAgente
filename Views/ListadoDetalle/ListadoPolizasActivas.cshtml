@@ -1,0 +1,89 @@
+﻿@model LoyalIGWEB.Models.PantallaListadoPolizasActivas
+@{
+    ViewBag.Title = "Pólizas Activas";
+    ViewBag.pTitle = "Pólizas Activas";
+    ViewBag.pageTitle = "Pólizas";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Listado de Polizas Activas</h4>
+
+                <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                    <thead class="table-primary">
+                        <tr>
+                            <th> </th>
+                            <td>Poliza</td>
+                            <td>Estado</td>
+                            <td>Tipo Venta</td>
+                            <td>Titular</td>
+                            <td>Aseg.</td>
+                            <td>Póliza</td>
+                            <td>Forma de Pago</td>
+                            <td>Prima Anual</td>
+                            <td>País</td>
+                            <td>Efectividad</td>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var oRegistroPolizas in Model.lsListadoPolizasActivas)
+                        {
+                        <tr>
+                            <td>
+                                <a class="btn btn-outline-secondary btn-sm edit" title="Consultar Póliza" onclick="location.href='@Url.Action("Consulta", "Certificados",new { nCodigoCertificado = oRegistroPolizas.CodigoCertificado })'">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                            <td width="110px">@oRegistroPolizas.NumeroPoliza.ToString()</td>
+                            <td>@oRegistroPolizas.DescripcionEstadoCertificado.ToString()</td>
+                            <td>@oRegistroPolizas.DescripcionTipoVenta.ToString()</td>
+                            <td>@oRegistroPolizas.NombreCompleto.ToString()</td>
+                            <td>@oRegistroPolizas.NumeroAsegurados.ToString()</td>
+                            <td>@oRegistroPolizas.DescripcionPoliza.ToString()</td>
+                            <td>@oRegistroPolizas.DescripcionFormaPago.ToString()</td>
+                            <td>@oRegistroPolizas.Prima.ToString("$###,###,###")</td>
+                            <td>@oRegistroPolizas.DescripcionPais.ToString()</td>
+                            <td>@oRegistroPolizas.FechaInicioVigencia.ToString()</td>
+
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+
+@section scripts{
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

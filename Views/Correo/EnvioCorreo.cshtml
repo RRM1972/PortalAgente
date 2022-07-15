@@ -1,0 +1,73 @@
+﻿@model LoyalIGWEB.Models.EnvioCorreo
+@{
+    ViewBag.Title = "Envio de Correo";
+    ViewBag.pTitle = "Envio de Correo";
+    ViewBag.pageTitle = "Envio de Correo";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Envio de Correo</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-lg-2">&nbsp;</div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/Correo/EnvioCorreo" method="post">
+                            <div class="col-md-12 mb-3">
+                                <label for="Para" class="form-label">Para</label>
+                                <input type="text" class="form-control" placeholder="Dirección correo ..." name="Para" id="Para" maxlength="100" value="@Model.Para" >
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="Copia" class="form-label">Con Copia</label>
+                                <input type="text" class="form-control" placeholder="Dirección correo copia ..." name="Copia" id="Copia" maxlength="100" value="@Model.Copia" >
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="AsuntoCorreo" class="form-label">Asunto</label>
+                                <input type="text" class="form-control" placeholder="Asunto ..." name="AsuntoCorreo" id="AsuntoCorreo" maxlength="100" value="@Model.AsuntoCorreo" >
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="CuerpoCorreo" class="form-label">Texto del Correo</label>
+                                <textarea type="text" class="form-control" placeholder="" name="CuerpoCorreo" id="CuerpoCorreo" >@Model.CuerpoCorreo</textarea>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Enviar Correo</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-2">&nbsp;</div>
+    </div>
+
+</body>
+</html>
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

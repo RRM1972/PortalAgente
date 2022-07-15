@@ -1,0 +1,298 @@
+﻿@model LoyalIGWEB.Models.ConsultaCertificado
+@{
+    ViewBag.Title = "Consulta Póliza";
+    ViewBag.pTitle = "Consulta Póliza";
+    ViewBag.pageTitle = "Consulta Póliza";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Consulta Póliza</title>
+</head>
+
+<body>
+
+    <div class="row">
+        <p>
+            <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNota" aria-controls="offcanvasNota" >
+                    <i class="mdi mdi-note d-block font-size-18" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Permite registrar notas en la poliza"></i>Notas
+                </button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Solicite cambios a la póliza">
+                    <i class="mdi mdi-database d-block font-size-18"></i>Modifica
+                </button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAnulacion" aria-controls="offcanvasAnulacion">
+                    <i class="mdi mdi-delete d-block font-size-18" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Solicite la Anulación de una póliza"></i>Anula
+                </button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Realice el pago en lines de la póliza">
+                    <i class="mdi mdi-credit-card d-block font-size-18"></i>Pagar
+                </button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Suba los archivos de la pólza" onclick="location.href='@Url.Action("SubirArchivosCertificado", "Certificados",new { nCodigoSolicitud = Model.CodigoSolicitud,nCodigoCertificado = Model.CodigoCertificado })'">
+                    <i class="mdi mdi-upload d-block font-size-18"></i>Sube
+                </button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light w-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="solicite la inclusión nuevos asegurados en la poliza" onclick="location.href='@Url.Action("RegistroPersona", "Certificados",new { nCodigoPersona = 0,nCodigoCertificado = Model.CodigoCertificado })'">
+                    <i class="mdi mdi-nature-people d-block font-size-18"></i> Incluye
+                </button>
+            </div>
+        </p>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="card">
+            <div class="text-center card-title rounded" style="background-color:@Model.ColorPrincipal">
+                @if (Model.CodigoCertificado == 229)
+                {<p><h4 class="text-white">Renato Ramirez Montoya 000-00-0459 @Model.DescripcionPoliza</h4></p>}
+            else
+            { <p><h4 class="text-white">@Model.ListaAsegurados[0].NombreCompleto @Model.NumeroPoliza @Model.DescripcionPoliza (@Model.DescripcionEstadoCertificado)</h4></p>}
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card ">
+                <div class="card-body">
+                    <h5>Datos de la Póliza</h5>
+                    <p><h6>@Model.DescripcionPais.ToString()</h6></p>
+                    @if (Model.IndicadorTrasplante == "1")
+                    {<p><h6>Trasplante de Organos</h6></p>}
+
+                    @if (Model.IndicadorMaternidad == "1")
+                    {<p><h6>Complicaciones de Maternidad</h6></p>}
+
+                    <p><h6>@Model.DescripcionPlanesConsulta</h6></p>
+                    <p><h6>@Model.PrimaComisionable.ToString("$###,###,###") Prima Anualizada</h6></p>
+                    <p><h6>Forma de Pago : @Model.DescripcionFormaPago.ToString()</h6></p>
+                    <p><h6>Forma de Efectividad : @Model.FechaInicioVigencia.ToString("MM/dd/yyyy")</h6></p>
+                    <p><h6>Numero de Asegurados : @Model.NumeroAsegurados.ToString("##")</h6></p>
+                    <p>
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light btn-sm" data-bs-toggle="offcanvas" data-bs-target="#offcanvasVisita" aria-controls="offcanvasVisita">
+                            <i class="fas fa-file-medical-alt font-size-16 align-middle me-2"></i> Documentos Póliza
+                        </button>
+                    </p>
+
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Primas a pagar</h5>
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap w-100">
+                        <thead class="table-primary">
+                            <tr>
+                                <td>Fecha Vencimiento</td>
+                                <td>Valor Prima</td>
+                                <td>Fecha Pago</td>
+                                <td>Estado</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var oPagos in Model.ListaPagos)
+                            {
+                                <tr>
+                                    <td>@oPagos.FechaCobro.ToString("MM/dd/yyyy")</td>
+                                    <td>@oPagos.MontoCuota.ToString("$###,###,###.00")</td>
+                                    @if (@oPagos.FechaPago.ToString() != "")
+                                    {
+                                        <td>@Convert.ToDateTime(oPagos.FechaPago.ToString()).ToString("MM/dd/yyyy")</td>
+                                    }
+                                    else
+                                    {
+                                        <td> </td>
+                                    }
+
+                                    <td>@oPagos.DescripcionEstadoCuota.ToString()</td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card">
+            <div class="text-center card-title rounded bg-primary">
+                <p><h4 class="text-white">Asegurados</h4></p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+        @foreach (var oAsegurados in Model.ListaAsegurados)
+        {
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-10">
+                                @if (Model.CodigoCertificado == 229)
+                                {<h5>Renato Ramirez Montoya (Titular)</h5>}
+                                else
+                                { <h5>@oAsegurados.NombreCompleto (@oAsegurados.DescripcionTipoPersonaCotizacion)</h5>}
+
+
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("RegistroPersona", "Certificados",new { nCodigoPersona = oAsegurados.CodigoPersona,nCodigoCertificado = oAsegurados.CodigoCertificado })'">
+                                    <i class="bx bxs-pencil font-size-16 align-middle me-2"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                        <h6>@oAsegurados.FechaNacimiento.ToString("MM/dd/yyyy") (@oAsegurados.Edad.ToString() Años)</h6>
+                        @if (oAsegurados.Sexo == "M")
+                        {<h6>Masculino</h6>}
+
+                        @if (oAsegurados.Sexo == "F")
+                        {<h6>Femenino</h6>}
+
+                        <h6>@oAsegurados.Correo</h6>
+                        <h6>@oAsegurados.Celular</h6>
+                        <h6>@oAsegurados.Telefono</h6>
+                        <h6>@oAsegurados.DireccionPrincipal @oAsegurados.DescripcionPaisPrincipal</h6>
+                        <h6>@oAsegurados.DireccionPostal @oAsegurados.DescripcionPaisPostal</h6>
+                        <h6>@oAsegurados.DireccionAlternativa @oAsegurados.DescripcionPaisAlternativa</h6>
+                        @if (@oAsegurados.FechaInicioVigencia != "")
+                        {<h6>Efectividad : @Convert.ToDateTime(oAsegurados.FechaInicioVigencia).ToString("MM/dd/yyyy")</h6>}
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+
+
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasVisita" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Documentos de Pólizas</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            @{ string sTipoDocimento = "";}
+                            @foreach (var oDocumento in Model.ListaDocumentos)
+                            {
+                                if (sTipoDocimento != oDocumento.DescripcionClasificacionTipoDocumento)
+                                {
+                                    sTipoDocimento = oDocumento.DescripcionClasificacionTipoDocumento;
+                                    <tr>
+                                        <td class="bg-dark text-white">@oDocumento.DescripcionClasificacionTipoDocumento</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td><a href='@Url.Action("Download", "Home",new { nCodigoDocumento = oDocumento.CodigoDocumento})'>@oDocumento.NombreDocumento</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- solicitud de Anulación-->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasAnulacion" aria-labelledby="offcanvasAnulacion">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Solicitar Anulación</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 mb-3">
+                        <label for="FechaNacmimientoConyuge" class="form-label">Fecha Anulación</label>
+                        <input class="form-control" type="date" value="" id="FechaAnulacion" name="FechaAnulacion">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Motivo Anulación</label>
+
+                        <select class="form-select" name="CodigoMotivoCancelacion" id="CodigoMotivoCancelacion">
+                            <option value=1>A pedido del cliente</option>
+                            <option value=2>Por falta de pago</option>
+                            <option value=3>Faltan Recaudos</option>
+                            <option value=4>Otro Motivo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="DireccionPrincipal" class="form-label">Explicación Anulación</label>
+                        <textarea type="text" class="form-control" placeholder="Explicación de Anulación..." name="ExplicacionAnulacion" id="ExplicacionAnulacion" rows="10" required></textarea>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="button" class="btn btn-primary waves-effect waves-light">Solicitar Anulación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registrar Nota-->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNota" aria-labelledby="offcanvasNota">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Registrar Nota de Póliza</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="col-md-12 mb-3">
+                        <label for="DireccionPrincipal" class="form-label">Nota de Póliza</label>
+                        <textarea type="text" class="form-control" placeholder="Ingrese Nota.." name="Nota" id="Nota" rows="10" cols="10" required></textarea>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="button" class="btn btn-primary waves-effect waves-light">Registrar Nota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@section scripts{
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="~/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="~/assets/libs/@("@chenfengyuan")/datepicker/datepicker.min.js"></script>
+
+    <!-- form advanced init -->
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}

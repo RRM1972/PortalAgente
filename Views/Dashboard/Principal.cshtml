@@ -1,0 +1,600 @@
+﻿@model LoyalIGWEB.Models.DashBoardPrincipal
+@{
+    ViewBag.Title = "Dashboard Principal de Agentes";
+    ViewBag.pTitle = "principal";
+    ViewBag.pageTitle = "dashboard";
+    Layout = "~/Views/Shared/Layouts/_layout_horizontal.cshtml";
+}
+
+@section styles{
+    <!-- plugin css -->
+    <link href="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="row">
+    <div class="col-xl-4 col-md-4">
+        <div class="card overflow-hidden">
+            <div class="bg-primary bg-soft">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">@Model.NombreAgente</h5>
+                            <p>Codigo - @Model.CodigoInternoAgente</p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end">
+                        <img src="~/assets/images/profile-img.png" alt="" class="img-fluid" height="10">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="avatar-md profile-user-wid mb-4">
+                            <span class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-16">
+                                @Model.NombreAgente.Substring(0, 1)
+                            </span>
+                        </div>
+                        <h5 class="font-size-15 text-truncate">@Model.NombreCompleto</h5>
+                        <p class="text-muted mb-0 text-truncate">@Model.Cargo</p>
+                        <p class="mb-1"><i class="bx bx-building"></i> @Model.Direccion</p>
+                        <p class="mb-1"><i class="bx bx-phone-call"></i> @Model.Celular</p>
+                        <p class="mb-1"><i class="bx bx-phone"></i> @Model.Telefono</p>
+                        <p class="mb-1"><i class="bx bx-mail-send"></i> @Model.Email</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3">
+        <div class="card">
+            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="location.href='@Url.Action("SolicitarCotizacion", "Cotizacion",new { nCodigoCotizacion = 0 })'">
+                <i class="bx bxs-purchase-tag font-size-16 align-middle me-2"></i> Generar Cotización
+            </button>
+        </div>
+        <div class="card mini-stats-wid">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="flex-grow-1">
+                        <p class="card-title mb-4" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Se muestran la cantidad de cotizaciones realizadas durante el periodo seleccionado">Cotizaciones</p>
+                        <h4 class="mb-0">@Model.TotalCotizaciones.ToString("###,###,###")</h4>
+
+                    </div>
+
+                    <div class="flex-shrink-0 align-self-center">
+
+                        <button type="button" class="btn btn-success position-relative p-0 avatar-sm rounded-circle" onclick="location.href='@Url.Action("ListadoCotizaciones", "ListadoDetalle")'">
+                            <span class="avatar-title bg-transparent text-reset">
+                                <i class="fa fa-calculator font-size-24 "></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-xl-5">
+                    <div class="dropdown-divider"></div>
+                    @foreach (var oCotizacionesEstado in Model.lsCotizacionesEstado)
+                    {
+                        <p class="mb-2">@oCotizacionesEstado.Cantidad @oCotizacionesEstado.DescripcionEstadoCotizacion</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5 col-md-5">
+        <div class="card mini-stats-wid">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="flex-grow-1">
+                        <p class="card-title mb-4" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Se muestran la cantidad de solicitudes de emisión enviadas durante el periodo seleccionado">Solicitudes Ingresadas</p>
+                        <h4 class="mb-0">@Model.TotalSolicitudesIngresadas.ToString("###,###,###")</h4>
+
+                    </div>
+
+                    <div class="flex-shrink-0 align-self-center">
+                        <button type="button" class="btn btn-success position-relative p-0 avatar-sm rounded-circle">
+                            <span class="avatar-title bg-transparent text-reset">
+                                <i class="fa fa-folder-open font-size-24 "></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive mt-1">
+                    <table class="table align-middle table-nowrap">
+                        <tbody>
+                            @foreach (var oSoicitudEstado in Model.lsSolicitudesIngresadas)
+                            {
+                                <tr>
+                                    <td style="width: 20%">
+                                        <p class="mb-0">@oSoicitudEstado.Estado</p>
+                                    </td>
+                                    <td style="width: 15%">
+                                        <h6 class="mb-0">@oSoicitudEstado.Cantidad.ToString("###,###,###") (@oSoicitudEstado.Factor.ToString("##.00%"))</h6>
+                                    </td>
+                                    <td>
+                                        <div class="progress bg-transparent progress-sm">
+                                            <div class="progress-bar-animated bg-primary rounded" role="progressbar" style="width: @oSoicitudEstado.Porcentaje%" aria-valuenow="@oSoicitudEstado.Porcentaje" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-xl-4 col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="card-title mb-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Se muestra el total de las primas anualizadas de las polzias generadas durante el periodo seleccionado">Primas</p>
+                                <h4 class="mb-0">@Model.TotalPrimas.ToString("$###,###,###")</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <button type="button" class="btn btn-success position-relative p-0 avatar-sm rounded-circle">
+                                    <span class="avatar-title bg-transparent text-reset">
+                                        <i class="fa fa-money-bill font-size-24 "></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="dropdown-divider"></div>
+                            <p class="mb-1 text-success">@Model.PorcentajePrimasPagadas.ToString("###.00%") de Prima Pagada (@Model.TotalPrimasPagadas.ToString("$###,###,###.00"))</p>
+                            <p class="mb-1">&nbsp;</p>
+                            <div class="dropdown-divider"></div>
+                            <p class="mb-1">@Model.PrimasNuevoNegocio.ToString("$###,###,###") Nuevo Negocio</p>
+                            <p class="mb-1">@Model.PrimasRenovaciones.ToString("$###,###,###") Renovaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-3">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="card-title mb-4" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Se muestra las cantidad las pólizas emitifas durante el periodo seleccionado">Polizas Activas</p>
+                                <h4 class="mb-0">@Model.TotalPolizasActivas.ToString("###,###,###")</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <button type="button" class="btn btn-success position-relative p-0 avatar-sm rounded-circle" onclick="location.href='@Url.Action("ListadoPolizasActivas", "ListadoDetalle")'">
+                                    <span class="avatar-title bg-transparent text-reset">
+                                        <i class="fa fa-newspaper font-size-24 "></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="dropdown-divider"></div>
+                            <p class="mb-1">@Model.PolizasNuevoNegocio.ToString("###,###,###") Nuevo Negocio</p>
+                            <p class="mb-1">@Model.PolizasRenovaciones.ToString("###,###,###") Renovaciones</p>
+                            <div class="dropdown-divider"></div>
+                            <p class="mb-1 text-warning">@Model.PolizasPrimerPago.ToString("###,###,###") Pendiente 1er Pago</p>
+                            <p class="mb-1 text-danger">@Model.PolizasCanceladas.ToString("###,###,###") Canceladas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-md-5">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="card-title mb-4" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Se muestra el total de las comisiones generadas de las primas pagadas durante el periodo seleccionado">Comisiones</p>
+                                <h4 class="mb-0">@Model.TotalComisiones.ToString("$###,###,###.00")</h4>
+
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <button type="button" class="btn btn-success position-relative p-0 avatar-sm rounded-circle" onclick="location.href='@Url.Action("ListarComisionesDashboard", "Dashboard")'">
+                                    <span class="avatar-title bg-transparent text-reset">
+                                        <i class="fa fa-credit-card font-size-24 "></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="dropdown-divider"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="mb-3">Nuevo Negocio</h5>
+                                    <p class="mb-3">@Model.ComisionesNuevoNegocioVentaPropia.ToString("$###,###,###.00") Venta Propia</p>
+                                    <p class="mb-3">@Model.ComisionesNuevoNegocioOtrosAgentes.ToString("$###,###,###.00") Otros Agentes</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="mb-3">Renovaciones</h5>
+                                    <p class="mb-3">@Model.ComisionesRenovacionesVentaPropia.ToString("$###,###,###.00") Venta Propia</p>
+                                    <p class="mb-3">@Model.ComisionesRenovacionesOtrosAgentes.ToString("$###,###,###.00") Otros Agentes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Dashboards</h4>
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills nav-justified" role="tablist">
+                <li class="nav-item waves-effect waves-light">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#Ventas" role="tab">
+                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                        <span class="d-none d-sm-block">Ventas</span>
+                    </a>
+                </li>
+                <li class="nav-item waves-effect waves-light">
+                    <a class="nav-link" data-bs-toggle="tab" href="#Productos" role="tab">
+                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                        <span class="d-none d-sm-block">Productos</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content p-3 text-muted">
+                <div class="tab-pane active" id="Ventas" role="tabpanel">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="Productos" role="tabpanel">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="polizas">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="primas">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="comisiones">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">World Vector Map</h4>
+                <p class="card-title-dsec">Example of world vector maps.</p>
+                <div id="world-map-markers" style="height: 420px"></div>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col-->
+</div>
+
+<!-- end row -->
+<!-- end modal -->
+<!-- subscribeModal -->
+<div class="modal fade bs-example-modal-xl" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content justify-content-center">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-12">
+                            <img src="~/assets/images/Loyal/PopupLoyal.png" height="525" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+@section scripts{
+    <!-- apexcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        var options = {
+            series: [{
+                name: 'Venta Mensual',
+                type: 'column',
+                data: [1200, 900, 5000, 4000, 800, 10000, 3400, 2100, 4400, 2200, 3000]
+            }, {
+                name: 'Acumulado',
+                type: 'area',
+                data: [1200, 2100, 7100, 11100, 11900, 21900, 25300, 27400, 31800, 33000, 36000]
+            }, {
+                name: 'Objetivo',
+                type: 'line',
+                data: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000]
+            }, {
+                name: 'Cancun',
+                type: 'line',
+                data: [50000, 50000, 50000, 50000, 50000, 50000, 50000, 50000, 50000, 50000, 50000]
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                stacked: false,
+            },
+            stroke: {
+                width: [0, 2, 5],
+                curve: 'smooth'
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%'
+                }
+            },
+
+            fill: {
+                opacity: [0.85, 0.25, 1],
+                gradient: {
+                    inverseColors: false,
+                    shade: 'light',
+                    type: "vertical",
+                    opacityFrom: 0.85,
+                    opacityTo: 0.55,
+                    stops: [0, 100, 100, 100]
+                }
+            },
+            labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003',
+                '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'
+            ],
+            markers: {
+                size: 0
+            },
+            xaxis: {
+                type: 'datetime'
+            },
+            yaxis: {
+                title: {
+                    text: 'Dólares',
+                },
+                min: 0
+            },
+            tooltip: {
+                shared: true,
+                intersect: false,
+                y: {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0) + " Dólares";
+                        }
+                        return y;
+
+                    }
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+    </script>
+
+    <script>
+        var optProducto = {
+            series: [{
+                name: 'Total',
+                data: [3, 8, 9, 8]
+            }, {
+                name: 'Polizas Vendidas',
+                data: [28,28,28,28]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+                stackType: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            xaxis: {
+                categories: ["BEYOND", "PRIVILEGE", "LIBERTY", "LEGACY"],
+            },
+            fill: {
+                opacity: 1
+            },
+            legend: {
+                position: 'bottom',
+                offsetX: 0,
+                offsetY: 50
+            },
+            title: {
+                text: 'Polizas Vendidas',
+                floating: true,
+                offsetY: 330,
+                align: 'center',
+                style: {
+                    color: '#444'
+                }
+            }
+        };
+
+        var polizas = new ApexCharts(document.querySelector("#polizas"), optProducto);
+        polizas.render();
+    </script>
+
+    <script>
+        var optProducto = {
+            series: [{
+                name: 'Total',
+                data: [25534, 11932, 23943, 29627]
+            }, {
+                name: 'Primas Generadas',
+                data: [91036, 91036, 91036, 91036]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+                stackType: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            xaxis: {
+                categories: ["BEYOND", "PRIVILEGE", "LIBERTY", "LEGACY"],
+            },
+            fill: {
+                opacity: 1
+            },
+            legend: {
+                position: 'bottom',
+                offsetX: 0,
+                offsetY: 50
+            },
+            title: {
+                text: 'Primas Generadas',
+                floating: true,
+                offsetY: 330,
+                align: 'center',
+                style: {
+                    color: '#444'
+                }
+            }
+        };
+        var primas = new ApexCharts(document.querySelector("#primas"), optProducto);
+        primas.render();
+    </script>
+
+    <script>
+        var optProducto = {
+            series: [{
+                name: 'Total',
+                data: [8936, 4176, 8380, 10369]
+            }, {
+                name: 'Comisiones Generadas',
+                data: [31862, 31862, 31862, 31862]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+                stackType: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            xaxis: {
+                categories: ["BEYOND", "PRIVILEGE", "LIBERTY", "LEGACY"],
+            },
+            fill: {
+                opacity: 1
+            },
+            legend: {
+                position: 'bottom',
+                offsetX: 0,
+                offsetY: 50
+            },
+            title: {
+                text: 'Comisiones Generadas',
+                floating: true,
+                offsetY: 330,
+                align: 'center',
+                style: {
+                    color: '#444'
+                }
+            }
+        };
+        var comisiones = new ApexCharts(document.querySelector("#comisiones"), optProducto);
+        comisiones.render();
+    </script>
+
+    <script src="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
+
+    <!-- Init js-->
+    <script src="~/assets/js/pages/vector-maps.init.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+}
+
