@@ -1693,12 +1693,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PortalAgente\PortalAgente.csproj">
-      <Project>{f872a45d-c2b3-48e6-9158-4ae98e38040f}</Project>
-      <Name>PortalAgente</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Loyal.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Loyal.Designer.cs</LastGenOutput>

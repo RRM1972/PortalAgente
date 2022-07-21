@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoyalIGWEB", "LoyalIGWEB.csproj", "{404B7B5F-57E9-4A46-993E-BDB82ADE8DA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalAgente", "..\PortalAgente\PortalAgente.csproj", "{F872A45D-C2B3-48E6-9158-4AE98E38040F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalAgente", "PortalAgente\PortalAgente.csproj", "{F872A45D-C2B3-48E6-9158-4AE98E38040F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
