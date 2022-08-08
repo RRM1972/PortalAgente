@@ -49,6 +49,10 @@
       <HintPath>..\..\WALoyal\Maestros\bin\Debug\Maestros.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PortalAgente, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>PortalAgente\bin\Debug\PortalAgente.dll</HintPath>
+    </Reference>
     <Reference Include="Seguridad">
       <HintPath>..\..\WALoyal\Seguridad\bin\Debug\Seguridad.dll</HintPath>
     </Reference>
