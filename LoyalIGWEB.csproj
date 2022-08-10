@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Maestros">
-      <HintPath>..\..\WALoyal\Maestros\bin\Debug\Maestros.dll</HintPath>
+      <HintPath>..\Maestros\bin\Debug\Maestros.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PortalAgente, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -54,7 +54,7 @@
       <HintPath>PortalAgente\bin\Debug\PortalAgente.dll</HintPath>
     </Reference>
     <Reference Include="Seguridad">
-      <HintPath>..\..\WALoyal\Seguridad\bin\Debug\Seguridad.dll</HintPath>
+      <HintPath>..\Seguridad\bin\Debug\Seguridad.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
